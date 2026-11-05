@@ -1,0 +1,84 @@
+<section aria-labelledby="authors-heading">
+  <div class="intro">
+    <span class="eyebrow">behind every good story</span>
+
+    <h1 id="authors-heading">Meet your next favorite author.</h1>
+
+    <p>A name, a story, a whole new world to explore.</p>
+  </div>
+
+  <div class="search-card">
+    <form (ngSubmit)="search()">
+      <label for="authorId">Find an author by ID</label>
+
+      <div class="search-row">
+        <input
+          id="authorId"
+          name="authorId"
+          type="number"
+          min="1"
+          step="1"
+          placeholder="Try an ID, like 1"
+          [(ngModel)]="authorId"
+          aria-describedby="author-help"
+          required
+        >
+
+        <button type="submit" [disabled]="loading">
+          {{ loading ? 'Searching…' : 'Find author →' }}
+        </button>
+      </div>
+
+      <p id="author-help" class="hint">
+        Enter their numeric ID to explore their books.
+      </p>
+    </form>
+  </div>
+
+  <p *ngIf="loading" class="loading" role="status">
+    Looking up your author…
+  </p>
+
+  <p *ngIf="message" class="message" role="alert">
+    {{ message }}
+  </p>
+
+  <div *ngIf="!author && !loading && !message" class="empty-state">
+    <span class="empty-icon" aria-hidden="true">✧</span>
+    <h2>Your next discovery is waiting</h2>
+    <p>Search above to see an author and their stories.</p>
+  </div>
+
+  <article *ngIf="author" class="profile" aria-live="polite">
+    <div class="profile-header">
+      <div class="avatar" aria-hidden="true">
+        {{ author.firstName.charAt(0) }}{{ author.lastName.charAt(0) }}
+      </div>
+
+      <div>
+        <h2>{{ author.firstName }} {{ author.lastName }}</h2>
+        <p class="author-id">Author #{{ author.id }}</p>
+      </div>
+    </div>
+
+    <div class="books-heading">
+      <h3>On the bookshelf</h3>
+
+      <span class="book-count">
+        {{ author.books.length }}
+        {{ author.books.length === 1 ? 'book' : 'books' }}
+      </span>
+    </div>
+
+    <ul *ngIf="author.books.length">
+      <li *ngFor="let book of author.books">
+        <span class="book-star" aria-hidden="true">✧</span>
+        {{ book.title }}
+      </li>
+    </ul>
+
+    <p *ngIf="!author.books.length" class="no-books">
+      No books have been added for this author yet.
+    </p>
+  </article>
+</section>
